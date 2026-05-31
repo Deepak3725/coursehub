@@ -1,48 +1,67 @@
 package helper
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 )
 
-// SendGrid API → HTTPS port 443 → Render never blocks this!
-// Earlier we used tls.Dial/smtp.Dial → Render blocks SMTP ports 465 and 587
-// SendGrid uses HTTP request instead of SMTP connection → works on all cloud providers ✅
+// Send_Mail sends an email using SendGrid API
+// Parameters:
+//   - to: recipient email address (e.g. "buyer@gmail.com")
+//   - sub: email subject (e.g. "Payment Verification")
+//   - body: email body text (e.g. "Your payment was successful")
+// Returns:
+//   - error: nil if email sent successfully, error message if failed
 
-// SendGrid API → Send Mail → Check Response
+// Flow: Build Payload → Create Request → Set Headers → Execute Request → Check Response
+
 func Send_Mail(to, sub, body string) error {
-	from := "deepakluitel679@gmail.com" //server mail this is used to send mail
-	apiKey := "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" //sendgrid api key used to verify before sending...
+	from := "deepakluitel679@gmail.com" // sender email - must match verified sender in SendGrid!
+	apiKey := "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"
 
-	// actual email payload in JSON format for SendGrid
-	payload := fmt.Sprintf(`{
-		"personalizations": [{"to": [{"email": "%s"}]}],
-		"from": {"email": "%s", "name": "CourseHub"},
-		"subject": "%s",
-		"content": [{"type": "text/plain", "value": "%s"}]
-	}`, to, from, sub, body)
+	// Step 1: Build payload using proper JSON encoding
+	// json.Marshal properly escapes special characters like \n, ", % etc
+	// fmt.Sprintf was breaking JSON when body contained special characters
+	payload := map[string]interface{}{
+		"personalizations": []map[string]interface{}{
+			{"to": []map[string]string{{"email": to}}},
+		},
+		"from":    map[string]string{"email": from, "name": "CourseHub"},
+		"subject": sub,
+		"content": []map[string]string{
+			{"type": "text/plain", "value": body},
+		},
+	}
 
-	//step 1: create HTTP POST request to SendGrid API
-	req, err := http.NewRequest("POST", "https://api.sendgrid.com/v3/mail/send", strings.NewReader(payload))
+	// json.Marshal converts map to proper JSON string handling all special characters
+	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		return err
 	}
 
-	//step 2: set headers - Authorization with API key and content type
-	req.Header.Set("Authorization", "Bearer "+apiKey) //sendgrid verifies using this api key before sending...
+	// Step 2: Create HTTP POST request
+	// bytes.NewReader converts JSON bytes to readable stream
+	req, err := http.NewRequest("POST", "https://api.sendgrid.com/v3/mail/send", bytes.NewReader(jsonPayload))
+	if err != nil {
+		return err
+	}
+
+	// Step 3: Set headers
+	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
-	//step 3: execute the request - send to SendGrid server
+	// Step 4: Execute request
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close() //closing response body because it occupies memory
+	defer resp.Body.Close()
 
-	//step 4: check if request was successful
+	// Step 5: Check response
 	if resp.StatusCode >= 400 {
 		b, _ := io.ReadAll(resp.Body)
 		return fmt.Errorf("sendgrid error: %s", string(b))
