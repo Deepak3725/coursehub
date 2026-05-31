@@ -39,7 +39,7 @@ func InitiatePayment(w http.ResponseWriter,r *http.Request){
 	}
 
 	//Now we set up sending maiL:
-	const baseUrl="http://localhost:8081" //address where my web is running
+	const baseUrl = "https://coursehub-10gd.onrender.com"//address where my web is running
 	yes_link:=fmt.Sprintf("%s/confirmpayment?token=%s&action=yes",baseUrl,payment.Token)//it would be sth like basurl/confirmpayment?token=xxx&action yes...
 	no_link:=fmt.Sprintf("%s/confirmpayment?token=%s&action=no",baseUrl,payment.Token)
 
