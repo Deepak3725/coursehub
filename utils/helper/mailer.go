@@ -15,26 +15,22 @@ func Send_Mail(to, sub, body string) error {
 
 	msg := "From: CourseHub<deepakluitel679@gmail.com>\r\nSubject: " + sub + "\r\n\r\n" + body //actual email format...
 
-	//step 1: smtp.Dial creates a plain unencrypted connection to port 587 first
-	//Port 587 expects plain connection first, then upgrade to TLS (STARTTLS)
-	//tls.Dial was wrong here because port 587 server expects plain "hello" first
-	//tls.Dial sends encrypted bytes immediately → server gets confused → timeout
-	//smtp.Dial sends plain first → then we upgrade via StartTLS → correct handshake ✅
-	client, err := smtp.Dial("smtp.gmail.com:587")
+	//step 1: create encrypted path to gmail server on internet..conn is the path blueprint our client will use when sending
+
+	conn, err := tls.Dial("tcp", "smtp.gmail.com:465", &tls.Config{ //takes network protocol "tcp",smtp.gmail.com(sending email server):465 is tunneled port
+		ServerName:         "smtp.gmail.com", //verifying server name where we will send
+		InsecureSkipVerify: true,             //Disabling some certificates verification...
+	})
 	if err != nil {
 		return err
 	}
-	defer client.Quit()
+	//setting up client
 
-	//step 2: upgrade plain connection to encrypted using STARTTLS
-	//this is the TLS upgrade that port 587 expects after plain connection
-	if err = client.StartTLS(&tls.Config{
-		ServerName:         "smtp.gmail.com", //verifying server name where we will send
-		InsecureSkipVerify: true,             //Disabling some certificates verification...
-	}); err != nil {
-		return err
+	client, clErr := smtp.NewClient(conn, "smtp.gmail.com") //creates new client that will send msg to smtp server using conn path
+
+	if clErr != nil {
+		return clErr
 	}
-
 	//client login verifying the client..
 	auth := smtp.PlainAuth("", from, password, "smtp.gmail.com") //returns auth that will be used to verify..
 
