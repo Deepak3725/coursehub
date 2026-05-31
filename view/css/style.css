@@ -1,0 +1,83 @@
+body {
+  background: linear-gradient(135deg, #c0392b 0%, #1a1a2e 50%, #2c3e8c 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main{
+    flex: 1;
+}
+.card-dark {
+  background-color: #1c1c1c;
+}
+.input-custom {
+  background-color: transparent;
+  border: 1.5px solid #4fc3f7;
+  color: #fff;
+}
+.input-custom::placeholder {
+  color: #aaa;
+}
+.input-custom:focus {
+  background-color: transparent;
+  border-color: #4fc3f7;
+  color: #fff;
+  box-shadow: 0 0 0 0.15rem rgba(79, 195, 247, 0.2);
+}
+.input-custom option {
+  background-color: #1c1c1c;
+  color: #fff;
+}
+
+.nav-brand{
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+.nav-link{
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #ffff;
+}
+
+.nav-link:hover{
+    width: 100%;
+    height: 80%;
+    border: 0.2px solid white;
+    border-radius: 30px;
+}
+
+.card{
+    height: auto;
+}
+
+.card-img-top{
+    height: 300px;
+}
+
+.card-store{
+    margin: 1%;
+}
+
+.heading{
+    color: #ffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-top: 0.5%;
+}
+.heading h1{
+    font-family: 'Poppins',sans-serif;
+    font-size: 3rem;
+    font-weight: bolder;
+    letter-spacing: -1px;
+
+}
+.heading h2{
+    font-family: 'Inter', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 200;
+}
+.footer-container{
+    background-color: #0000;
+}

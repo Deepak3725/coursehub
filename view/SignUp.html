@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign Up</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100 py-4">
+<div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 w-100 card-dark" style="max-width:440px;">
+<h2 class="text-center text-white fw-bold mb-1 text-uppercase">SIGN UP</h2>
+<p class="text-center text-secondary mb-4 small">Create your account to get started!</p>
+<div class="mb-3">
+<input id="fname" type="text" class="form-control rounded-pill px-4 py-2 input-custom" placeholder="First Name"/>
+</div>
+<div class="mb-3">
+<input id="lname" type="text" class="form-control rounded-pill px-4 py-2 input-custom" placeholder="Last Name"/>
+</div>
+<div class="mb-3">
+<input id="email" type="email" class="form-control rounded-pill px-4 py-2 input-custom" placeholder="Email Address"/>
+</div>
+<div class="mb-3">
+<input id="password" type="password" class="form-control rounded-pill px-4 py-2 input-custom" placeholder="Password"/>
+</div>
+<div class="mb-3">
+<input id="conf_pw" type="password" class="form-control rounded-pill px-4 py-2 input-custom" placeholder="Confirm Password"/>
+</div>
+<div class="mb-4">
+<select id="role" class="form-select rounded-pill px-4 py-2 input-custom">
+<option value="" disabled selected>Select Role</option>
+<option value="user">User</option>
+<option value="creator">Creator</option>
+</select>
+</div>
+<div class="d-grid mb-3">
+<button onclick="SignUp()" class="btn btn-outline-info rounded-pill py-2 fw-semibold text-white">Create Account</button>
+</div>
+<p class="text-center text-secondary small mt-2 mb-0">
+Already have an account?
+<a href="index.html" class="text-info text-decoration-none fw-semibold">Login</a>
+</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="Js/signup.js"></script>
+</body>
+</html>
