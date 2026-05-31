@@ -17,7 +17,7 @@ func Send_Mail(to, sub, body string) error {
 
 	//step 1: create encrypted path to gmail server on internet..conn is the path blueprint our client will use when sending
 
-	conn, err := tls.Dial("tcp", "smtp.gmail.com:465", &tls.Config{ //takes network protocol "tcp",smtp.gmail.com(sending email server):465 is tunneled port
+	conn, err := tls.Dial("tcp", "smtp.gmail.com:587", &tls.Config{ //takes network protocol "tcp",smtp.gmail.com(sending email server):465 is tunneled port
 		ServerName:         "smtp.gmail.com", //verifying server name where we will send
 		InsecureSkipVerify: true,             //Disabling some certificates verification...
 	})
