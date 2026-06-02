@@ -44,8 +44,8 @@ func InitiatePayment(w http.ResponseWriter,r *http.Request){
 	no_link:=fmt.Sprintf("%s/confirmpayment?token=%s&action=no",baseUrl,payment.Token)
 
 	body := fmt.Sprintf(
-    "A payment for your course has been made.\n\nJRNL Number: %s\n\nClick this link if payment is Valid: %s\n\nor\n\nClick this link if payment is NOT valid: %s",
-    payment.Reference_Num, yes_link, no_link,
+    "A payment for your course title: %s\n\n has been made.\n\nJRNL Number: %s\n\nClick this link if payment is Valid: %s\n\nor\n\nClick this link if payment is NOT valid: %s",
+    course.Title,payment.Reference_Num, yes_link, no_link,
 )
    if Mail_err := helper.Send_Mail(*course.Creator_mail, "Payment Verification", body); Mail_err != nil {
     httpResp.RespondwithError(w, http.StatusBadRequest, Mail_err.Error())
